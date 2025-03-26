@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./app
+    container_name: my_app
+    restart: always
+    depends_on:
+      - mysql_db
+      - rabbitmq_server
+      - memcached_server
+    ports:
+      - "5000:5000"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_server
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app
+
+  mysql_db:
+    image: mysql:8
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ogechukwu
+      MYSQL_DATABASE: mysql
+    ports:
+      - "3306:3306"
+
+  rabbitmq_server:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_server
+    environment:
+      RABBITMQ_DEFAULT_USER: oge
+      RABBITMQ_DEFAULT_PASS: ogechukwu1
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  memcached_server:
+    image: memcached:latest
+    container_name: memcached_server
+    restart: always
+    ports:
+      - "11211:11211"

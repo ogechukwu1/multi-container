@@ -1,0 +1,4 @@
+flask
+mysql-connector-python
+pymemcache  # This replaces 'memcache'
+pika  # For RabbitMQ
